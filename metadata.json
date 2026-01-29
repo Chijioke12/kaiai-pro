@@ -1,0 +1,7 @@
+{
+  "name": "KaiAI Pro",
+  "description": "A high-performance AI assistant optimized for KaiOS devices, featuring D-pad navigation, voice interaction, and real-time search.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

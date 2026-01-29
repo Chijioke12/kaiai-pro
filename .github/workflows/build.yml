@@ -1,0 +1,48 @@
+name: Build KaiAI Pro
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 1. Install Dependencies (including the Legacy converter)
+      - name: Install Dependencies
+        run: |
+          npm install
+          # We force install these to ensure the build works
+          npm install -D @vitejs/plugin-legacy terser autoprefixer
+
+      # 2. Build the App (Modern -> Legacy)
+      - name: Build Project
+        run: npm run build
+
+      # 3. Package for KaiOS
+      # Vite puts files in 'dist'. We check for the manifest and zip it.
+      - name: Create application.zip
+        run: |
+          # Copy manifest from public to dist if Vite didn't do it automatically
+          if [ -f public/manifest.webapp ]; then
+            cp public/manifest.webapp dist/
+          fi
+          
+          # Go into dist and zip everything
+          cd dist && zip -r ../application.zip ./*
+
+      # 4. Upload
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KaiAI-Pro-v1
+          path: application.zip
