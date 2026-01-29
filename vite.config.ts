@@ -3,13 +3,14 @@ import react from '@vitejs/plugin-react'
 import legacy from '@vitejs/plugin-legacy'
 import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     legacy({
-      // FORCE compilation for KaiOS (Firefox 48)
-      targets: ['firefox 48'],
+      // FIX: Target Firefox 30. 
+      // This forces Babel to convert "..." (spread) into ES5 
+      // BEFORE it processes async functions, preventing the crash.
+      targets: ['firefox 30'], 
       additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
       renderLegacyChunks: true,
       polyfills: true
@@ -21,11 +22,7 @@ export default defineConfig({
     },
   },
   build: {
-    // CRITICAL FIX: Target Firefox 40 to force Esbuild to convert 
-    // "Spread Syntax" (...) into standard JS before the Legacy plugin runs.
-    target: ['firefox40'], 
-    
-    // KaiOS Optimization
+    // We removed 'target' here because the plugin handles it now
     minify: 'terser',
     cssMinify: true,
     assetsInlineLimit: 0, 
