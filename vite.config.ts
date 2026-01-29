@@ -21,10 +21,13 @@ export default defineConfig({
     },
   },
   build: {
-    // KaiOS has small memory, compress heavily
+    // CRITICAL FIX: Target Firefox 40 to force Esbuild to convert 
+    // "Spread Syntax" (...) into standard JS before the Legacy plugin runs.
+    target: ['firefox40'], 
+    
+    // KaiOS Optimization
     minify: 'terser',
     cssMinify: true,
-    // Do not inline assets (KaiOS prefers separate files)
     assetsInlineLimit: 0, 
   }
 })
