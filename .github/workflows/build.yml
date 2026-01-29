@@ -20,9 +20,9 @@ jobs:
       # 1. Install Dependencies (including the Legacy converter)
       - name: Install Dependencies
         run: |
-          npm install
+          npm install --legacy-peer-deps
           # We force install these to ensure the build works
-          npm install -D @vitejs/plugin-legacy terser autoprefixer
+          npm install -D @vitejs/plugin-legacy terser autoprefixer --legacy-peer-deps
 
       # 2. Build the App (Modern -> Legacy)
       - name: Build Project
